@@ -1,0 +1,5 @@
+Learn python
+
+1. Get posts from vk public
+2. Collect them in postgres
+3. Api to get posts (Flask maybe)
