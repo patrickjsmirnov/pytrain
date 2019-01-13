@@ -1,5 +1,5 @@
 import vk
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 app = Flask(__name__)
 
 
@@ -10,7 +10,11 @@ def hello():
 
 @app.route('/posts')
 def posts():
-    return jsonify(vk.get_posts())
+    limit = request.args.get('limit')
+    if limit:
+        return jsonify(vk.get_posts(limit))
+
+    return jsonify(vk.get_posts(100))
 
 
 @app.route('/about')

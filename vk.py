@@ -53,10 +53,10 @@ def save_posts(posts):
     conn.commit()
 
 
-def get_posts():
+def get_posts(limit=100):
     conn = psycopg2.connect(dbname='postgres', user='postgres', password='123', host='localhost')
     cursor = conn.cursor()
-    select_query = 'SELECT * FROM posts'
+    select_query = 'SELECT * FROM posts LIMIT {}'.format(limit)
     cursor.execute(select_query)
     records = cursor.fetchall()
     conn.commit()
@@ -74,14 +74,14 @@ def get_post(post_id):
 
 
 def main():
-    posts = get_posts_api_vk(90000)
-    print(len(posts))
-    print(posts)
-    print(posts)
-    save_posts(posts)
-    get_posts()
-    post = get_post(7615550)
-    print('post = ', post)
+    # posts = get_posts_api_vk(90000)
+    # print(len(posts))
+    # print(posts)
+    # print(posts)
+    # save_posts(posts)
+    print(get_posts(3))
+    # post = get_post(7615550)
+    # print('post = ', post)
 
 
 main()
