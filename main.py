@@ -6,7 +6,7 @@ import psycopg2
 def main():
     group_id = '-22746750'
     url = 'https://api.vk.com/method/wall.get'
-    token = 'generate_your_token'
+    token = ''
 
     r = requests.get(url, params={
         'owner_id': group_id,
@@ -21,17 +21,27 @@ def main():
 
     conn = psycopg2.connect(dbname='postgres', user='postgres', password='123', host='localhost')
     cursor = conn.cursor()
+    cursor.execute('TRUNCATE TABLE posts')
 
-    insert_query = "INSERT INTO test VALUES {}".format("(4, 'test4')")
-    select_query = 'SELECT * FROM test LIMIT 10'
+    for item in items:
+        cursor.execute("INSERT INTO posts (id, comments, likes, reposts, text) VALUES (%s, %s, %s, %s, %s)",
+                       (item['id'],
+                        item['comments']['count'],
+                        item['likes']['count'],
+                        item['reposts']['count'],
+                        item['text'])
+                       )
 
-    cursor.execute(insert_query)
-
+    select_query = 'SELECT * FROM posts'
     cursor.execute(select_query)
     records = cursor.fetchall()
 
     for row in records:
-        print(row[1])
+        print(row[0])
+
+    conn.commit()
+
+
 
 
 main()
